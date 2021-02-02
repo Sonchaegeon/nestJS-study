@@ -8,6 +8,6 @@ export class AppController {
   @Get('github')
   @Redirect()
   getGithub() {
-      return { url: "http://github.com/sonchaegeon" };
+    return { url: 'http://github.com/sonchaegeon' };
   }
 }
