@@ -9,38 +9,22 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
-import { Cat } from './entities/cat.entity';
+import { Cat } from './interfaces/cat.interface';
 
 @Controller('cats')
 export class CatsController {
-  @Get()
-  findAll(@Query() query: Cat) {
-    return `This action returns all cats 
-      <br> name: ${query.name}`;
-  }
+  constructor(private catsService: CatsService) {}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    console.log(id);
-    return `This action return a #${id} cat`;
+  @Get()
+  async findAll(): Promise<Cat[]> {
+    return this.catsService.findAll();
   }
 
   @Post()
-  @Header('Cache-Control', 'no-store')
-  create(@Body() createCatDto: CreateCatDto) {
-    return `This action adds a new cat
-      <br> name: ${createCatDto.name} age: ${createCatDto.age}`;
-  }
-
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
-    return `This action updates a #${id} cat`;
-  }
-
-  @Delete('id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} cat`;
+  async create(@Body() createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto)
   }
 }
