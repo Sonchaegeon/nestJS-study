@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Header, Param, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
 
 @Controller('cats')
@@ -14,5 +14,11 @@ export class CatsController {
     create(@Body() body): string {
         return `This action adds a new cat
             <br> body: ${body.name}`;
+    }
+
+    @Get(':id')
+    findOne(@Param('id') id): string {
+        console.log(id);
+        return `This action return a #${id} cat`;
     }
 }
