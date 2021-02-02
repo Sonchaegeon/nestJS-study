@@ -1,21 +1,30 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   Param,
   Post,
-  Req,
+  Put,
+  Query,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { CreateCatDto } from './create-cat.dto';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { UpdateCatDto } from './dto/update-cat.dto';
+import { Cat } from './entities/cat.entity';
 
 @Controller('cats')
 export class CatsController {
   @Get()
-  findAll(@Req() request: Request): string {
-    return `This action returns all cats
-      <br> query: ${request.query.name}`;
+  findAll(@Query() query: Cat) {
+    return `This action returns all cats 
+      <br> name: ${query.name}`;
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    console.log(id);
+    return `This action return a #${id} cat`;
   }
 
   @Post()
@@ -25,9 +34,13 @@ export class CatsController {
       <br> name: ${createCatDto.name} age: ${createCatDto.age}`;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id): string {
-    console.log(id);
-    return `This action return a #${id} cat`;
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
+    return `This action updates a #${id} cat`;
+  }
+
+  @Delete('id')
+  remove(@Param('id') id: string) {
+    return `This action removes a #${id} cat`;
   }
 }
