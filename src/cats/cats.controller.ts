@@ -6,6 +6,7 @@ import {
   Get,
   Header,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -14,9 +15,9 @@ import {
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
-import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './interfaces/cat.interface';
 
+@UseFilters(HttpExceptionFilter)
 @Controller('cats')
 export class CatsController {
   constructor(private catsService: CatsService) {}
@@ -26,9 +27,13 @@ export class CatsController {
     return this.catsService.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.catsService.findOne(id);
+  }
+
   @Post()
-  @UseFilters(HttpExceptionFilter)
   async create(@Body() createCatDto: CreateCatDto) {
-    throw new ForbiddenException();
+    return this.catsService.create(createCatDto);
   }
 }
