@@ -14,6 +14,7 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './interfaces/cat.interface';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @UseFilters(HttpExceptionFilter)
 @UseGuards(RolesGuard)
@@ -32,6 +33,7 @@ export class CatsController {
   }
 
   @Post()
+  @Roles('admin')
   async create(@Body(ValidationPipe) createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
     return { message: 'Cat created' };
