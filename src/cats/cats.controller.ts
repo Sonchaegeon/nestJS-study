@@ -30,7 +30,6 @@ export class CatsController {
   }
 
   @Post()
-  @UsePipes()
   async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
     return this.catsService.create(createCatDto);
   }
