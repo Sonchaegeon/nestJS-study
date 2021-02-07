@@ -1,3 +1,4 @@
+import { Test } from '@nestjs/testing';
 import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
@@ -6,17 +7,22 @@ describe('CatsController', () => {
   let catsController: CatsController;
   let catsService: CatsService;
 
-  beforeEach(() => {
-    catsService = new CatsService();
-    catsController = new CatsController(catsService);
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [CatsController],
+      providers: [CatsService],
+    }).compile();
+
+    catsService = moduleRef.get<CatsService>(CatsService);
+    catsController = moduleRef.get<CatsController>(CatsController);
   });
 
   describe('findAll', () => {
     it('should return an array of cats', async () => {
       const result: Cat[] = [
         {
-          name: 'testCat',
           age: 2,
+          name: 'Pixel',
         },
       ];
       jest.spyOn(catsService, 'findAll').mockImplementation(() => result);
